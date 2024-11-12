@@ -155,7 +155,6 @@ mergeBelowThreshold <- function(head, las, heightThreshold){
 	## merging
  	mergeID <-getMergeID(tree, treeStats$centroid.geometry, treeStats$minDiam/2, cm)
 
-	#mergeID <-getMergeIDwithAngle(tree, treeStats$centroid.geometry, las_dt, treeStats$minDiam/2, cm)
 	if(is.null(mergeID)){
 		print(paste0('no merge candidate found for tree ID: ',tree))
 		next
@@ -164,21 +163,6 @@ mergeBelowThreshold <- function(head, las, heightThreshold){
 	las_dt <- mergeTreesByID(tree, mergeID, las_dt)
 	#print('finished mergeTreesByID')
 	cm <- update_crown_metrics(head, las_dt, cm, tree, mergeID)
-	#minD <- compute_min_centroid_dist(cm$centroid.geometry)
-	#centroids <- compute_3d_centroids(las_dt)
-	#print("3d centroids")
-	#print(centroids)
-	#minD3d <- compute_min_centroid_dist(centroids)
-	#print("minimum distances for XYZ centroids")
-	#print(minD3d)
-	#print("minimum distances from XY centroids")
-	#print(minD)
-	#df <- data.frame( ID = originalIDs,
-	#		 Min_XY_centroid_dist = minD,
-	#		 Min_XYZ_centroid_dist =minD3d)
-	#print(df)
-	#write.csv(df, 'teak_043_min_centroid_dist.csv')
-	##print(length(originalIDs))
 	next
 	}
 	else{ 
@@ -207,14 +191,9 @@ mergeBelowThreshold <- function(head, las, heightThreshold){
 # Merge centroids
 tryCatch({
  
-     # reload the command line file args                      
-     args <- commandArgs(trailingOnly = TRUE)
-     input_file <- args[1]
-     output_file <- args[2]
-
                            
-     flas <- readLAS(output_file)
-     f_head <- readLASheader(output_file)
+     flas <- readLAS(input_file)
+     f_head <- readLASheader(input_file)
     
      # merge trees from segmented las
      mergedLAS <- mergeBelowThreshold(f_head, flas, 100)
